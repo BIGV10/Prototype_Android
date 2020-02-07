@@ -44,7 +44,7 @@ class AddRequestActivity : AppCompatActivity() {
 //                    val (request, response, result) = Fuel.get(base_url, listOf("barcode" to barcodeResult)).response()
 //                    val q = Fuel.get(base_url, listOf("barcode" to barcodeResult))
 //                    text_result.setText(result.toString())
-                    TODO() // GET запрос по barcode
+//                    TODO() GET запрос по barcode
                     var x = 0
                 }
 
