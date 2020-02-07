@@ -3,4 +3,6 @@
     <string name="add_request_text">Добавить заявку</string>
     <string name="current_request_text">Просмотр заявок</string>
     <string name="exit_btn_text">Выход</string>
+    <string name="scan_text" >Сканировать</string>
+    <string name="result_text" >Результат</string>
 </resources>

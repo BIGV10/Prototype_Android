@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".add_request_activity">
+    tools:context=".AddRequestActivity">
 
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/barcodeView"
@@ -13,35 +13,49 @@
         app:zxing_scanner_layout="@layout/custom_barcode_layout" />
 
     <Button
-        android:text="*"
         android:id="@+id/btnTorch"
-        app:layout_constraintRight_toRightOf="@id/barcodeView"
+        android:layout_width="64dp"
+        android:layout_height="64dp"
+        android:layout_marginRight="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/ic_flashlight_off"
         app:layout_constraintBottom_toBottomOf="@id/barcodeView"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        app:layout_constraintRight_toRightOf="@id/barcodeView" />
 
     <LinearLayout
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@id/barcodeView"
+        android:id="@+id/linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintTop_toBottomOf="@id/barcodeView">
+
         <Button
+            android:id="@+id/btnScan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/btnScan"
-            android:text="Scan" />
-        <TextView
-            android:layout_marginRight="4dp"
-            android:id="@+id/labelResult"
-            android:text="Result: "
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:text="@string/scan_text" />
 
         <TextView
-            android:text="..."
+            android:id="@+id/labelResult"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="4dp"
+            android:text="@string/result_text" />
+
+        <TextView
             android:id="@+id/txtResult"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:text="..." />
     </LinearLayout>
+
+    <MultiAutoCompleteTextView
+        android:id="@+id/text_result"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
