@@ -1,27 +1,24 @@
 package com.example.prototype
 
+import android.R.attr.password
 import android.content.Context
 import android.os.Build
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.VibrationEffect
 import android.os.Vibrator
-import com.github.kittinunf.fuel.Fuel
-import com.github.kittinunf.fuel.core.FuelError
-import com.github.kittinunf.fuel.httpGet
-import com.github.kittinunf.fuel.json.FuelJson
-import com.github.kittinunf.fuel.json.responseJson
-import com.github.kittinunf.result.Result
+import androidx.appcompat.app.AppCompatActivity
+import com.google.gson.GsonBuilder
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
 import kotlinx.android.synthetic.main.activity_add_request_activity.*
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
-import retrofit2.Retrofit
-import retrofit2.converter.gson.GsonConverterFactory
+import okhttp3.FormBody
+import okhttp3.HttpUrl
+import okhttp3.OkHttpClient
+import okhttp3.Request
+import java.io.IOException
+
 
 class AddRequestActivity : AppCompatActivity() {
     lateinit var captureManager: CaptureManager
@@ -29,10 +26,10 @@ class AddRequestActivity : AppCompatActivity() {
     var torchState: Boolean = false
     var baseUrl = "https://bigv-postgres.herokuapp.com/api/"
 
-    fun returnResult(barcode: String): Result<FuelJson, FuelError> {
-        val (request, response, result) = Fuel.get(baseUrl +"equipment", listOf("barcode" to barcode.toString())).responseJson()
-        return result
-    }
+//    fun returnResult(barcode: String): Result<FuelJson, FuelError> {
+//        val (request, response, result) = Fuel.get(baseUrl +"equipment", listOf("barcode" to barcode.toString())).responseJson()
+//        return result
+//    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -47,6 +44,7 @@ class AddRequestActivity : AppCompatActivity() {
                 override fun barcodeResult(barcodeResult: BarcodeResult?) {
                     barcodeResult?.let {
                         txtResult.text = it.text
+
                         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                         if (Build.VERSION.SDK_INT >= 26) {
                             vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE))
@@ -55,8 +53,7 @@ class AddRequestActivity : AppCompatActivity() {
                         }
 
 //                        val (request, response, result) = Fuel.get(baseUrl +"equipment", listOf("barcode" to barcodeResult.toString())).responseJson()
-                        var result = returnResult(barcodeResult.toString())
-                        text_result.setText(result.toString())
+
 //                        val retrofit = Retrofit.Builder()
 //                            .baseUrl(baseUrl)
 //                            .addConverterFactory(GsonConverterFactory.create())
@@ -86,13 +83,15 @@ class AddRequestActivity : AppCompatActivity() {
 //                    text_result.setText(result.toString())
 //                    TODO() GET запрос по barcode
 
+                    fetchJson(baseUrl + "equipment/", "?barcode=" + barcodeResult.toString())
 
                 }
-
                 override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
                 }
             })
         }
+
+
 
 
 
@@ -107,6 +106,26 @@ class AddRequestActivity : AppCompatActivity() {
                 barcodeView.setTorchOn()
             }
         }
+    }
+
+    fun fetchJson(url: String, parameters: String) {
+        val request = Request.Builder().url(url + parameters).build()
+        val client = OkHttpClient()
+        client.newCall(request).enqueue(object: okhttp3.Callback {
+            override fun onResponse(call: okhttp3.Call, response: okhttp3.Response) {
+                val body = response?.body?.string()
+                println(body)
+
+                val gson = GsonBuilder().create()
+
+                val item = gson.fromJson(body, Equipment::class.java)
+                text_result.setText(item.toString())
+            }
+            override fun onFailure(call: okhttp3.Call, e: IOException) {
+            }
+        })
+
+
     }
 
     override fun onPause() {
