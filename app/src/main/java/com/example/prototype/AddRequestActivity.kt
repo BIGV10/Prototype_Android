@@ -13,10 +13,7 @@ import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
 import com.journeyapps.barcodescanner.CaptureManager
 import kotlinx.android.synthetic.main.activity_add_request_activity.*
-import okhttp3.FormBody
-import okhttp3.HttpUrl
-import okhttp3.OkHttpClient
-import okhttp3.Request
+import okhttp3.*
 import java.io.IOException
 
 
@@ -83,8 +80,25 @@ class AddRequestActivity : AppCompatActivity() {
 //                    text_result.setText(result.toString())
 //                    TODO() GET запрос по barcode
 
-                    fetchJson(baseUrl + "equipment/", "?barcode=" + barcodeResult.toString())
+                    //fetchJson(baseUrl + "equipment/", "?barcode=" + barcodeResult.toString())
 
+                    val apiService = ServiceBuilder.buildService(ApiService::class.java)
+
+                    val requestCall = apiService.getEquipmentbyBarcode()
+
+                    requestCall.enqueue(object: Callback<Equipment> {
+                        override fun onResponse(call: Call<Equipment>, response: Response<Equipment>) {
+                            val body = response?.body?.string()
+                            println(body)
+
+                            val gson = GsonBuilder().create()
+
+                            val item = gson.fromJson(body, Equipment::class.java)
+                            text_result.setText(item.toString())
+                        }
+                        override fun onFailure(call: Call<Equipment>, e: IOException) {
+                        }
+                    })
                 }
                 override fun possibleResultPoints(resultPoints: MutableList<ResultPoint>?) {
                 }
