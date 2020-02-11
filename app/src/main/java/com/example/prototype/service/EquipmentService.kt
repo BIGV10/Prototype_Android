@@ -1,11 +1,14 @@
 package com.example.prototype.service
 
-import com.example.prototype.Equipment
+import com.example.prototype.model.Equipment
 import retrofit2.Call
 import retrofit2.http.GET
+import retrofit2.http.Path
 
-class EquipmentService {
+interface EquipmentService {
     @GET("equipment/{id}")
-    fun getEquipmentById(id: Long): Call<Equipment> {
-    }
+    fun getEquipmentById(@Path("id") id: Long): Call<Equipment>
+
+    @GET("equipment")
+    fun getAllEquipment(): Call<List<Equipment>>
 }

@@ -1,11 +1,8 @@
 package com.example.prototype
 
+import com.example.prototype.model.Equipment
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.*
-import kotlinx.coroutines.*
-import okhttp3.Interceptor
-import com.example.prototype.Equipment.*
 
 interface ApiService {
     @GET("equipment/{barcode}")
