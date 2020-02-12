@@ -4,15 +4,15 @@ import com.google.gson.annotations.SerializedName
 
 data class Equipment(
     @SerializedName("id")
-    val id: Int = 0,
+    var id: Int? = null,
     @SerializedName("barcode")
-    val barcode: String? = null,
+    var barcode: String? = null,
     @SerializedName("name")
-    val name: String? = null,
+    var name: String? = null,
     @SerializedName("comment")
-    val comment: String? = null,
+    var comment: String? = null,
     @SerializedName("request")
-    val request: List<Request>? = null
+    var request: List<Request>? = null
 )
 
 //data class Equipment(

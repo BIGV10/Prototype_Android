@@ -4,13 +4,13 @@ import com.google.gson.annotations.SerializedName
 
 data class Request(
     @SerializedName("id")
-    val id: Int = 0,
+    var id: Int? = null,
     @SerializedName("comment")
-    val comment: String? = null,
+    var comment: String? = null,
     @SerializedName("status")
-    val status: Int? = null,
+    var status: Int? = null,
     @SerializedName("equipment")
-    val equipment: List<Equipment>? = null
+    var equipment: List<Equipment>? = null
 )
 
 //data class Request (

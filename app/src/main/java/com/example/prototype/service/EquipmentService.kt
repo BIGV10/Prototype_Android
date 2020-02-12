@@ -1,10 +1,8 @@
 package com.example.prototype.service
 
-import com.example.prototype.model.Equipment
+import com.example.prototype.model.*
 import retrofit2.Call
-import retrofit2.http.GET
-import retrofit2.http.Path
-import retrofit2.http.Query
+import retrofit2.http.*
 
 interface EquipmentService {
     @GET("equipment/")

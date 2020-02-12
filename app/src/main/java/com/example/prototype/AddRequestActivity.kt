@@ -8,8 +8,8 @@ import android.os.Vibrator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.prototype.model.Equipment
-import com.example.prototype.service.EquipmentService
+import com.example.prototype.model.*
+import com.example.prototype.service.*
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -31,20 +31,18 @@ class AddRequestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_request_activity)
 
-        loadEquipment("101340000123")
-
-        recyclerView_add.layoutManager = LinearLayoutManager(this)
-        recyclerView_add.adapter = EquipmentAdapter(equipmentList)
+        recyclerView_EquipmentList.layoutManager = LinearLayoutManager(this)
+        recyclerView_EquipmentList.adapter = EquipmentAdapter(equipmentList)
 
         captureManager = CaptureManager(this, barcodeView)
         captureManager.initializeFromIntent(intent, savedInstanceState)
 
-        btnScan.setOnClickListener {
-            txtResult.text = "Сканирование..."
+        btn_Scan.setOnClickListener {
+            txt_ScanResult.text = "Сканирование..."
             barcodeView.decodeSingle(object : BarcodeCallback {
                 override fun barcodeResult(barcodeResult: BarcodeResult?) {
                     barcodeResult?.let {
-                        txtResult.text = it.text
+                        txt_ScanResult.text = it.text
                         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                         if (Build.VERSION.SDK_INT >= 26) {
                             vibrator.vibrate(
@@ -65,16 +63,21 @@ class AddRequestActivity : AppCompatActivity() {
                 }
             })
         }
-        btnTorch.setOnClickListener {
+
+        btn_Torch.setOnClickListener {
             if (torchState) {
                 torchState = false
-                btnTorch.setBackgroundResource(R.drawable.ic_flash_off)
+                btn_Torch.setBackgroundResource(R.drawable.ic_flash_off)
                 barcodeView.setTorchOff()
             } else {
                 torchState = true
-                btnTorch.setBackgroundResource(R.drawable.ic_flash_on)
+                btn_Torch.setBackgroundResource(R.drawable.ic_flash_on)
                 barcodeView.setTorchOn()
             }
+        }
+
+        btn_sendRequest.setOnClickListener {
+            sendNewRequest()
         }
     }
 
@@ -85,19 +88,30 @@ class AddRequestActivity : AppCompatActivity() {
             override fun onResponse(call: Call<Equipment>, response: Response<Equipment>) {
                 if (response.isSuccessful) {
                     val body = response.body()
-                    equipmentList.add(body as Equipment)
+                    if (equipmentList.indexOf(body as Equipment) < 0) {
+                        equipmentList.add(body as Equipment)
+                    } else {
+                        Toast.makeText(
+                            this@AddRequestActivity,
+                            "Данное оборудование уже было добавлено", Toast.LENGTH_LONG
+                        ).show()
+                    }
 
                     var adapter = EquipmentAdapter(equipmentList)
-                    recyclerView_add.adapter = adapter
-
-                    text_result.setText(body.toString())
+                    recyclerView_EquipmentList.adapter = adapter
 
                 } else { //Status code is not 200's
-                    Toast.makeText(
-                        this@AddRequestActivity,
-                        "Не удалось получить информацию",
-                        Toast.LENGTH_LONG
-                    ).show()
+                    if (response.code() == 500) {
+                        Toast.makeText(
+                            this@AddRequestActivity,
+                            "Оборудование не найдено\n" + response.code(), Toast.LENGTH_LONG
+                        ).show()
+                    } else {
+                        Toast.makeText(
+                            this@AddRequestActivity,
+                            "Не удалось получить информацию" + response.code(), Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
             }
 
@@ -119,6 +133,50 @@ class AddRequestActivity : AppCompatActivity() {
 //        })
     }
 
+    fun sendNewRequest() {
+        val requestService = ServiceBuilder.buildService(RequestService::class.java)
+        var newRequest = Request()
+        newRequest.comment = text_RequestComment.text.toString()
+        newRequest.status = 0
+        val requestCallNewRequest = requestService.postRequest(newRequest)
+        requestCallNewRequest.enqueue(object : Callback<Request> {
+
+            override fun onResponse(call: Call<Request>, response: Response<Request>) {
+                if (response.isSuccessful) {
+                    var createdRequest = (response.body() as Request).id!!
+                    addEquipmentToRequest(createdRequest)
+                }
+            }
+
+            override fun onFailure(call: Call<Request>, t: Throwable) {
+                Toast.makeText(this@AddRequestActivity, t.message, Toast.LENGTH_LONG)
+            }
+        })
+    }
+
+    fun addEquipmentToRequest(requestId: Int) {
+        val requestService = ServiceBuilder.buildService(RequestService::class.java)
+        var equipmentCount = equipmentList.size
+        var successfulRequests = 0
+        var unsuccessfulRequests = ""
+        equipmentList.forEach {
+            val requestCallAddEquipment = requestService.postEquipmentToRequest(requestId, it.id!!)
+            requestCallAddEquipment.enqueue(object : Callback<Equipment> {
+                override fun onResponse(call: Call<Equipment>, response: Response<Equipment>) {
+                    successfulRequests++
+                    if (successfulRequests == equipmentCount) {
+                        Toast.makeText( this@AddRequestActivity, "Заявка отправлена успешно", Toast.LENGTH_LONG ).show()
+                        finish()
+                    }
+                }
+
+                override fun onFailure(call: Call<Equipment>, t: Throwable) {
+                    unsuccessfulRequests += t.message + "\n"
+                    Toast.makeText(this@AddRequestActivity, unsuccessfulRequests, Toast.LENGTH_LONG).show()
+                }
+            })
+        }
+    }
 
     override fun onPause() {
         super.onPause()

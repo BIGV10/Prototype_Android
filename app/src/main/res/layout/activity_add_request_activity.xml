@@ -6,68 +6,92 @@
     android:layout_height="match_parent"
     tools:context=".AddRequestActivity">
 
+
     <com.journeyapps.barcodescanner.DecoratedBarcodeView
         android:id="@+id/barcodeView"
         android:layout_width="match_parent"
         android:layout_height="135dp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:zxing_scanner_layout="@layout/custom_barcode_layout" />
+        app:zxing_scanner_layout="@layout/custom_barcode_layout" >
+
+
+    </com.journeyapps.barcodescanner.DecoratedBarcodeView>
 
     <Button
-        android:id="@+id/btnTorch"
-        android:layout_width="64dp"
-        android:layout_height="64dp"
+        android:id="@+id/btn_Torch"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
         android:background="@drawable/ic_flash_off"
         app:layout_constraintBottom_toBottomOf="@+id/barcodeView"
-        app:layout_constraintRight_toRightOf="@id/barcodeView" />
-
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        app:layout_constraintTop_toBottomOf="@+id/barcodeView">
-
-        <Button
-            android:id="@+id/btnScan"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/scan_text" />
-
-        <TextView
-            android:id="@+id/labelResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="4dp"
-            android:text="@string/result_text" />
-
-        <TextView
-            android:id="@+id/txtResult"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="..." />
-    </LinearLayout>
+        app:layout_constraintEnd_toEndOf="@+id/barcodeView" />
 
     <MultiAutoCompleteTextView
-        android:id="@+id/text_result"
+        android:id="@+id/text_RequestComment"
         android:layout_width="0dp"
         android:layout_height="100dp"
-        android:text="qwerty"
+        android:hint="Комментарий к заявке"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView_add"
+        android:id="@+id/recyclerView_EquipmentList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/btn_sendRequest"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/text_result"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintTop_toBottomOf="@+id/text_RequestComment" />
+
+    <Button
+        android:id="@+id/btn_sendRequest"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Отправить"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/barcodeView">
+
+        <Button
+            android:id="@+id/btn_Scan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/scan_text" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="clip_vertical|left"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/txt_ResultText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:text="@string/result_text" />
+
+            <TextView
+                android:id="@+id/txt_ScanResult"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="4dp"
+                android:layout_marginTop="4dp"
+                android:text="..." />
+        </LinearLayout>
+
+    </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
