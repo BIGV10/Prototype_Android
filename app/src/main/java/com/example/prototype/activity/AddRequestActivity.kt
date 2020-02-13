@@ -27,7 +27,6 @@ class AddRequestActivity : AppCompatActivity() {
     lateinit var captureManager: CaptureManager
     var scanState: Boolean = false
     var torchState: Boolean = false
-    val baseUrl = "https://bigv-postgres.herokuapp.com/api/"
     val equipmentList = ArrayList<Equipment>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -133,7 +132,7 @@ class AddRequestActivity : AppCompatActivity() {
         val requestService =
             ServiceBuilder.buildService(RequestService::class.java)
         var newRequest = Request()
-        newRequest.comment = text_RequestComment.text.toString()
+        newRequest.comment = text_EquipmentBarcode.text.toString()
         newRequest.status = 0
         val requestCallNewRequest = requestService.postRequest(newRequest)
         requestCallNewRequest.enqueue(object : Callback<Request> {

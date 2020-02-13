@@ -13,4 +13,7 @@ interface EquipmentService {
 
     @GET("equipment/")
     fun getEquipmentByBarcode(@Query("barcode") barcode: String): Call<Equipment>
+
+    @POST("equipment/")
+    fun postEquipment(@Body equipment: Equipment): Call<Equipment>
 }

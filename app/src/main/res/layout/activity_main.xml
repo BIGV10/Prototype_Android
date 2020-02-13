@@ -7,7 +7,7 @@
     tools:context=".activity.MainActivity">
 
     <Button
-        android:id="@+id/current_request_btn"
+        android:id="@+id/btn_Current_request"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginStart="8dp"
@@ -19,21 +19,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/add_request_btn"
+        android:id="@+id/btn_Add_request"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="16dp"
         android:text="@string/add_request_text"
-        app:layout_constraintBottom_toTopOf="@id/current_request_btn"
+        app:layout_constraintBottom_toTopOf="@id/btn_Current_request"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
     <Button
-        android:id="@+id/exit_btn"
+        android:id="@+id/btn_exit"
         android:layout_width="0dp"
         android:layout_height="80dp"
         android:layout_marginStart="8dp"
@@ -43,7 +43,16 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/current_request_btn"
+        app:layout_constraintTop_toBottomOf="@id/btn_Current_request"
         app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/btn_Hidden"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:alpha="0"
+        android:text="Button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
