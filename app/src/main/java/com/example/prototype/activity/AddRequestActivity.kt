@@ -1,4 +1,4 @@
-package com.example.prototype
+package com.example.prototype.activity
 
 import android.content.Context
 import android.os.Build
@@ -8,6 +8,9 @@ import android.os.Vibrator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.prototype.adapter.EquipmentAdapter
+import com.example.prototype.R
+import com.example.prototype.ServiceBuilder
 import com.example.prototype.model.*
 import com.example.prototype.service.*
 import com.google.zxing.ResultPoint
@@ -32,7 +35,8 @@ class AddRequestActivity : AppCompatActivity() {
         setContentView(R.layout.activity_add_request_activity)
 
         recyclerView_EquipmentList.layoutManager = LinearLayoutManager(this)
-        recyclerView_EquipmentList.adapter = EquipmentAdapter(equipmentList)
+        recyclerView_EquipmentList.adapter =
+            EquipmentAdapter(equipmentList)
 
         captureManager = CaptureManager(this, barcodeView)
         captureManager.initializeFromIntent(intent, savedInstanceState)
@@ -82,7 +86,8 @@ class AddRequestActivity : AppCompatActivity() {
     }
 
     fun loadEquipment(barcode: String) {
-        val equipmentService = ServiceBuilder.buildService(EquipmentService::class.java)
+        val equipmentService =
+            ServiceBuilder.buildService(EquipmentService::class.java)
         val requestCall = equipmentService.getEquipmentByBarcode(barcode)
         requestCall.enqueue(object : Callback<Equipment> {
             override fun onResponse(call: Call<Equipment>, response: Response<Equipment>) {
@@ -97,7 +102,10 @@ class AddRequestActivity : AppCompatActivity() {
                         ).show()
                     }
 
-                    var adapter = EquipmentAdapter(equipmentList)
+                    var adapter =
+                        EquipmentAdapter(
+                            equipmentList
+                        )
                     recyclerView_EquipmentList.adapter = adapter
 
                 } else { //Status code is not 200's
@@ -134,7 +142,8 @@ class AddRequestActivity : AppCompatActivity() {
     }
 
     fun sendNewRequest() {
-        val requestService = ServiceBuilder.buildService(RequestService::class.java)
+        val requestService =
+            ServiceBuilder.buildService(RequestService::class.java)
         var newRequest = Request()
         newRequest.comment = text_RequestComment.text.toString()
         newRequest.status = 0
@@ -155,7 +164,8 @@ class AddRequestActivity : AppCompatActivity() {
     }
 
     fun addEquipmentToRequest(requestId: Int) {
-        val requestService = ServiceBuilder.buildService(RequestService::class.java)
+        val requestService =
+            ServiceBuilder.buildService(RequestService::class.java)
         var equipmentCount = equipmentList.size
         var successfulRequests = 0
         var unsuccessfulRequests = ""

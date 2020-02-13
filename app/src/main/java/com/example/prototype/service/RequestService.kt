@@ -10,4 +10,7 @@ interface RequestService {
 
     @POST("request/{requestId}/equipment/{equipmentId}")
     fun postEquipmentToRequest(@Path("requestId") requestId: Int, @Path("equipmentId") equipmentId: Int): Call<Equipment>
+
+    @GET("lastRequests/")
+    fun getLastRequests(): Call<List<Request>>
 }
