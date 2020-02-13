@@ -124,21 +124,9 @@ class AddRequestActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Equipment>, t: Throwable) {
-                Toast.makeText(this@AddRequestActivity, t.message, Toast.LENGTH_LONG)
+                Toast.makeText(this@AddRequestActivity, t.message, Toast.LENGTH_LONG).show()
             }
         })
-
-//        val requestCall = equipmentService.getAllEquipment()
-//        requestCall.enqueue(object : Callback<List<Equipment>> {
-//            override fun onResponse(call: Call<List<Equipment>>, response: Response<List<Equipment>>) {
-//                    val equipmentResponse = response.body()!!
-//                    text_result.setText(equipmentResponse.toString())
-//            }
-//
-//            override fun onFailure(call: Call<List<Equipment>>, t: Throwable) {
-//                text_result.setText(t.message)
-//            }
-//        })
     }
 
     fun sendNewRequest() {
@@ -149,7 +137,6 @@ class AddRequestActivity : AppCompatActivity() {
         newRequest.status = 0
         val requestCallNewRequest = requestService.postRequest(newRequest)
         requestCallNewRequest.enqueue(object : Callback<Request> {
-
             override fun onResponse(call: Call<Request>, response: Response<Request>) {
                 if (response.isSuccessful) {
                     var createdRequest = (response.body() as Request).id!!
@@ -158,7 +145,7 @@ class AddRequestActivity : AppCompatActivity() {
             }
 
             override fun onFailure(call: Call<Request>, t: Throwable) {
-                Toast.makeText(this@AddRequestActivity, t.message, Toast.LENGTH_LONG)
+                Toast.makeText(this@AddRequestActivity, t.message, Toast.LENGTH_LONG).show()
             }
         })
     }

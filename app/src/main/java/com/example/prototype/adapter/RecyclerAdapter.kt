@@ -78,14 +78,6 @@ class RequestAdapter(var requestList: ArrayList<Request>) :
 
         }
     }
-
-    interface OnNoteListener {
-        fun onNoteClick(position: Int)
-    }
-}
-
-fun loadEquipment() {
-
 }
 
 class CustomViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
