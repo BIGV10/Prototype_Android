@@ -5,12 +5,12 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface RequestService {
-    @POST("request/")
+    @POST("requests/")
     fun postRequest(@Body newRequest: Request): Call<Request>
 
-    @POST("request/{requestId}/equipment/{equipmentId}")
+    @POST("requests/{requestId}/equipment/{equipmentId}")
     fun postEquipmentToRequest(@Path("requestId") requestId: Int, @Path("equipmentId") equipmentId: Int): Call<Equipment>
 
-    @GET("lastRequests/")
+    @GET("requests/last")
     fun getLastRequests(): Call<List<Request>>
 }

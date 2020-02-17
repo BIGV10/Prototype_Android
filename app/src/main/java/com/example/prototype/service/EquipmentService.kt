@@ -5,15 +5,15 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface EquipmentService {
-    @GET("equipment/")
+    @GET("equipments/")
     fun getEquipmentAll(): Call<List<Equipment>>
 
-    @GET("equipment/{id}")
+    @GET("equipments/{id}")
     fun getEquipmentById(@Path("id") id: Int): Call<Equipment>
 
-    @GET("equipment/")
+    @GET("equipments")
     fun getEquipmentByBarcode(@Query("barcode") barcode: String): Call<Equipment>
 
-    @POST("equipment/")
+    @POST("equipments/")
     fun postEquipment(@Body equipment: Equipment): Call<Equipment>
 }
