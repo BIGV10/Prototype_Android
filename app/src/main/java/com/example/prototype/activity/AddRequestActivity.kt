@@ -33,19 +33,19 @@ class AddRequestActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_request_activity)
 
-        recyclerView_EquipmentList.layoutManager = LinearLayoutManager(this)
-        recyclerView_EquipmentList.adapter =
+        recycler_view_equipment_list.layoutManager = LinearLayoutManager(this)
+        recycler_view_equipment_list.adapter =
             EquipmentAdapter(equipmentList)
 
-        captureManager = CaptureManager(this, barcodeView)
+        captureManager = CaptureManager(this, barcode_view)
         captureManager.initializeFromIntent(intent, savedInstanceState)
 
-        btn_Scan.setOnClickListener {
-            txt_ScanResult.text = "Сканирование..."
-            barcodeView.decodeSingle(object : BarcodeCallback {
+        btn_scan.setOnClickListener {
+            txt_scan_result.text = "Сканирование..."
+            barcode_view.decodeSingle(object : BarcodeCallback {
                 override fun barcodeResult(barcodeResult: BarcodeResult?) {
                     barcodeResult?.let {
-                        txt_ScanResult.text = it.text
+                        txt_scan_result.text = it.text
                         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                         if (Build.VERSION.SDK_INT >= 26) {
                             vibrator.vibrate(
@@ -67,19 +67,19 @@ class AddRequestActivity : AppCompatActivity() {
             })
         }
 
-        btn_Torch.setOnClickListener {
+        btn_torch.setOnClickListener {
             if (torchState) {
                 torchState = false
-                btn_Torch.setBackgroundResource(R.drawable.ic_flash_off)
-                barcodeView.setTorchOff()
+                btn_torch.setBackgroundResource(R.drawable.ic_flash_off)
+                barcode_view.setTorchOff()
             } else {
                 torchState = true
-                btn_Torch.setBackgroundResource(R.drawable.ic_flash_on)
-                barcodeView.setTorchOn()
+                btn_torch.setBackgroundResource(R.drawable.ic_flash_on)
+                barcode_view.setTorchOn()
             }
         }
 
-        btn_sendRequest.setOnClickListener {
+        btn_send_request.setOnClickListener {
             sendNewRequest()
         }
     }
@@ -105,7 +105,7 @@ class AddRequestActivity : AppCompatActivity() {
                         EquipmentAdapter(
                             equipmentList
                         )
-                    recyclerView_EquipmentList.adapter = adapter
+                    recycler_view_equipment_list.adapter = adapter
 
                 } else { //Status code is not 200's
                     if (response.code() == 500) {
@@ -132,7 +132,7 @@ class AddRequestActivity : AppCompatActivity() {
         val requestService =
             ServiceBuilder.buildService(RequestService::class.java)
         var newRequest = Request()
-        newRequest.comment = text_EquipmentBarcode.text.toString()
+        newRequest.comment = text_equipment_barcode.text.toString()
         newRequest.status = 0
         val requestCallNewRequest = requestService.postRequest(newRequest)
         requestCallNewRequest.enqueue(object : Callback<Request> {

@@ -6,53 +6,53 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/textRequest_Comment"
+        android:id="@+id/text_request_barcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Equipment_Barcode"
-        app:layout_constraintStart_toEndOf="@+id/textView"
-        app:layout_constraintTop_toTopOf="@+id/textView" />
+        app:layout_constraintStart_toEndOf="@+id/text_static_request_barcode"
+        app:layout_constraintTop_toTopOf="@+id/text_static_request_barcode" />
 
     <TextView
-        android:id="@+id/textView3"
+        android:id="@+id/text_static_request_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Статус:"
-        app:layout_constraintStart_toStartOf="@+id/textView"
-        app:layout_constraintTop_toBottomOf="@+id/textRequest_Comment" />
+        app:layout_constraintStart_toStartOf="@+id/text_static_request_barcode"
+        app:layout_constraintTop_toBottomOf="@+id/text_request_barcode" />
 
     <TextView
-        android:id="@+id/textRequest_Status"
+        android:id="@+id/text_request_status"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:text="Request_Status"
-        app:layout_constraintStart_toEndOf="@+id/textView3"
-        app:layout_constraintTop_toTopOf="@+id/textView3" />
+        app:layout_constraintStart_toEndOf="@+id/text_static_request_name"
+        app:layout_constraintTop_toTopOf="@+id/text_static_request_name" />
 
     <TextView
-        android:id="@+id/textView5"
+        android:id="@+id/text_static_request_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
         android:text="Список оборудования:"
-        app:layout_constraintStart_toStartOf="@+id/textView3"
-        app:layout_constraintTop_toBottomOf="@+id/textView3" />
+        app:layout_constraintStart_toStartOf="@+id/text_static_request_name"
+        app:layout_constraintTop_toBottomOf="@+id/text_static_request_name" />
 
     <TextView
-        android:id="@+id/textRequest_Equipment"
+        android:id="@+id/text_request_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"
         android:text="Request_Equipment"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/textView5"
-        app:layout_constraintTop_toBottomOf="@+id/textView5" />
+        app:layout_constraintStart_toStartOf="@+id/text_static_request_comment"
+        app:layout_constraintTop_toBottomOf="@+id/text_static_request_comment" />
 
     <TextView
-        android:id="@+id/textView"
+        android:id="@+id/text_static_request_barcode"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"

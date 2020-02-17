@@ -22,8 +22,8 @@ class LastRequestsActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_last_requests)
 
-        recyclerView_RequestsList.layoutManager = LinearLayoutManager(this)
-        recyclerView_RequestsList.adapter = RequestAdapter(requestList)
+        recyclerView_requestsList.layoutManager = LinearLayoutManager(this)
+        recyclerView_requestsList.adapter = RequestAdapter(requestList)
 
         loadLastRequests()
     }
@@ -37,7 +37,7 @@ class LastRequestsActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     val body = response.body()
                     requestList = ArrayList(body!!)
-                    recyclerView_RequestsList.adapter = RequestAdapter(requestList)
+                    recyclerView_requestsList.adapter = RequestAdapter(requestList)
                     Toast.makeText(
                         this@LastRequestsActivity,
                         "Всё загрузилось\n" + response.code(), Toast.LENGTH_LONG

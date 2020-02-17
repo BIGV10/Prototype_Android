@@ -29,29 +29,24 @@ class AddEquipmentActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_equipment_activity)
 
-        captureManager = CaptureManager(this, barcodeView)
+        captureManager = CaptureManager(this, barcode_view)
         captureManager.initializeFromIntent(intent, savedInstanceState)
 
-        btn_Scan.setOnClickListener {
-            txt_ScanResult.text = "Сканирование..."
-            barcodeView.decodeSingle(object : BarcodeCallback {
+        btn_scan.setOnClickListener {
+            txt_scan_result.text = "Сканирование..."
+            barcode_view.decodeSingle(object : BarcodeCallback {
                 override fun barcodeResult(barcodeResult: BarcodeResult?) {
                     barcodeResult?.let {
-                        txt_ScanResult.text = it.text
+                        txt_scan_result.text = it.text
                         val vibrator = getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                         if (Build.VERSION.SDK_INT >= 26) {
-                            vibrator.vibrate(
-                                VibrationEffect.createOneShot(
-                                    200,
-                                    VibrationEffect.DEFAULT_AMPLITUDE
-                                )
+                            vibrator.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE)
                             )
                         } else {
                             vibrator.vibrate(200)
                         }
-                        text_Barcode_Type.setText(it.barcodeFormat.toString())
-                        text_EquipmentBarcode.setText(it.result.toString())
-
+                        text_barcode_type.setText(it.barcodeFormat.toString())
+                        text_equipment_barcode.setText(it.result.toString())
                     }
                 }
 
@@ -60,19 +55,19 @@ class AddEquipmentActivity : AppCompatActivity() {
             })
         }
 
-        btn_sendEquipment.setOnClickListener {
+        btn_send_equipment.setOnClickListener {
             sendNewEquipment()
         }
 
-        btn_Torch.setOnClickListener {
+        btn_torch.setOnClickListener {
             if (torchState) {
                 torchState = false
-                btn_Torch.setBackgroundResource(R.drawable.ic_flash_off)
-                barcodeView.setTorchOff()
+                btn_torch.setBackgroundResource(R.drawable.ic_flash_off)
+                barcode_view.setTorchOff()
             } else {
                 torchState = true
-                btn_Torch.setBackgroundResource(R.drawable.ic_flash_on)
-                barcodeView.setTorchOn()
+                btn_torch.setBackgroundResource(R.drawable.ic_flash_on)
+                barcode_view.setTorchOn()
             }
         }
     }
@@ -80,15 +75,15 @@ class AddEquipmentActivity : AppCompatActivity() {
     private fun sendNewEquipment() {
         val equipmentService = ServiceBuilder.buildService(EquipmentService::class.java)
         var newEquipment = Equipment()
-        newEquipment.barcode = text_EquipmentBarcode.text.toString()
-        newEquipment.name = text_EquipmentName.text.toString()
-        newEquipment.comment = text_EquipmentComment.text.toString()
+        newEquipment.barcode = text_equipment_barcode.text.toString()
+        newEquipment.name = text_equipment_name.text.toString()
+        newEquipment.comment = text_equipment_comment.text.toString()
         val requestCallNewRequest = equipmentService.postEquipment(newEquipment)
         requestCallNewRequest.enqueue(object : Callback<Equipment> {
             override fun onResponse(call: Call<Equipment>, response: Response<Equipment>) {
                 if (response.isSuccessful) {
                     var createdEquipment = (response.body() as Equipment).id!!
-                    Toast.makeText( this@AddEquipmentActivity, "Оборудование успешно добавлено\n ID: " + createdEquipment, Toast.LENGTH_LONG ).show()
+                    Toast.makeText( this@AddEquipmentActivity, "Оборудование успешно добавлено\nID: " + createdEquipment, Toast.LENGTH_LONG ).show()
                     finish()
                 }
             }

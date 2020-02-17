@@ -13,17 +13,17 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        btn_Add_request.setOnClickListener {
+        btn_add_request.setOnClickListener {
             val goToActivity = Intent(this, AddRequestActivity::class.java)
             startActivity(goToActivity)
         }
 
-        btn_Current_request.setOnClickListener {
+        btn_current_requests.setOnClickListener {
             val goToActivity = Intent(this, LastRequestsActivity::class.java)
             startActivity(goToActivity)
         }
 
-        btn_Hidden.setOnClickListener {
+        btn_hidden_add_equipment.setOnClickListener {
             val goToActivity = Intent(this, AddEquipmentActivity::class.java)
             startActivity(goToActivity)
         }
