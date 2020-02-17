@@ -6,11 +6,11 @@
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/text_request_barcode"
+        android:id="@+id/text_request_comment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
-        android:text="Equipment_Barcode"
+        android:text="Request_Comment"
         app:layout_constraintStart_toEndOf="@+id/text_static_request_barcode"
         app:layout_constraintTop_toTopOf="@+id/text_static_request_barcode" />
 
@@ -21,7 +21,7 @@
         android:layout_marginTop="8dp"
         android:text="Статус:"
         app:layout_constraintStart_toStartOf="@+id/text_static_request_barcode"
-        app:layout_constraintTop_toBottomOf="@+id/text_request_barcode" />
+        app:layout_constraintTop_toBottomOf="@+id/text_request_comment" />
 
     <TextView
         android:id="@+id/text_request_status"
@@ -42,7 +42,7 @@
         app:layout_constraintTop_toBottomOf="@+id/text_static_request_name" />
 
     <TextView
-        android:id="@+id/text_request_comment"
+        android:id="@+id/text_request_equipment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="8dp"

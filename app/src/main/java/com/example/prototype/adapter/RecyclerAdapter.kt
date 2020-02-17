@@ -9,7 +9,8 @@ import com.example.prototype.R
 import com.example.prototype.activity.AddRequestActivity
 import com.example.prototype.model.Equipment
 import com.example.prototype.model.Request
-import kotlinx.android.synthetic.main.equipment_row.view.*
+import kotlinx.android.synthetic.main.row_equipment.view.*
+import kotlinx.android.synthetic.main.row_request.view.*
 import java.lang.StringBuilder
 
 class EquipmentAdapter(var equipmentList: ArrayList<Equipment>) :
@@ -22,7 +23,7 @@ class EquipmentAdapter(var equipmentList: ArrayList<Equipment>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val layoutInflater = LayoutInflater.from(parent?.context)
-        val cellForRowId = layoutInflater.inflate(R.layout.equipment_row, parent, false)
+        val cellForRowId = layoutInflater.inflate(R.layout.row_equipment, parent, false)
         return CustomViewHolder(cellForRowId)
 
     }
@@ -46,14 +47,14 @@ class RequestAdapter(var requestList: ArrayList<Request>) :
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CustomViewHolder {
         val layoutInflater = LayoutInflater.from(parent?.context)
-        val cellForRowId = layoutInflater.inflate(R.layout.request_row, parent, false)
+        val cellForRowId = layoutInflater.inflate(R.layout.row_request, parent, false)
         return CustomViewHolder(cellForRowId)
 
     }
 
     override fun onBindViewHolder(holder: CustomViewHolder, position: Int) {
         val currentRequest = requestList.get(position)
-        holder?.view?.text_equipment_barcode?.text = currentRequest.comment
+        holder?.view?.text_request_comment?.text = currentRequest.comment
         val statusString: String
         when (currentRequest.status) {
             0 -> statusString = "Новая заявка"
@@ -61,7 +62,7 @@ class RequestAdapter(var requestList: ArrayList<Request>) :
             2 -> statusString = "Заявка выполнена"
             else -> statusString = "Неизвестный вид статуса"
         }
-        holder?.view?.text_equipment_name?.text = statusString
+        holder?.view?.text_request_status?.text = statusString
         var requestEquipment = StringBuilder()
         currentRequest.equipment?.forEach {
             requestEquipment.append(it.barcode + " " + it.name + " " + it.comment + "\n")
@@ -70,7 +71,7 @@ class RequestAdapter(var requestList: ArrayList<Request>) :
             requestEquipment.append("За заявкой нет закрепленного оборудования")
         else
             requestEquipment.setLength(requestEquipment.length - 1)
-        holder?.view?.text_equipment_comment?.text = requestEquipment
+        holder?.view?.text_request_equipment?.text = requestEquipment
 
         holder?.view.setOnClickListener{
 

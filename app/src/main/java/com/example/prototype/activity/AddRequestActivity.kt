@@ -108,15 +108,17 @@ class AddRequestActivity : AppCompatActivity() {
                     recycler_view_equipment_list.adapter = adapter
 
                 } else { //Status code is not 200's
-                    if (response.code() == 500) {
+                    if (response.code() == 404) {
                         Toast.makeText(
                             this@AddRequestActivity,
-                            "Оборудование не найдено\n" + response.code(), Toast.LENGTH_LONG
+                            "Оборудование с данным штрихкодом не зарегистрировано\n" + response.code(),
+                            Toast.LENGTH_LONG
                         ).show()
                     } else {
                         Toast.makeText(
                             this@AddRequestActivity,
-                            "Не удалось получить информацию" + response.code(), Toast.LENGTH_LONG
+                            "Не удалось получить информацию\n" + response.code(),
+                            Toast.LENGTH_LONG
                         ).show()
                     }
                 }
@@ -161,14 +163,19 @@ class AddRequestActivity : AppCompatActivity() {
                 override fun onResponse(call: Call<Equipment>, response: Response<Equipment>) {
                     successfulRequests++
                     if (successfulRequests == equipmentCount) {
-                        Toast.makeText( this@AddRequestActivity, "Заявка отправлена успешно", Toast.LENGTH_LONG ).show()
+                        Toast.makeText(
+                            this@AddRequestActivity,
+                            "Заявка отправлена успешно",
+                            Toast.LENGTH_LONG
+                        ).show()
                         finish()
                     }
                 }
 
                 override fun onFailure(call: Call<Equipment>, t: Throwable) {
                     unsuccessfulRequests += t.message + "\n"
-                    Toast.makeText(this@AddRequestActivity, unsuccessfulRequests, Toast.LENGTH_LONG).show()
+                    Toast.makeText(this@AddRequestActivity, unsuccessfulRequests, Toast.LENGTH_LONG)
+                        .show()
                 }
             })
         }
