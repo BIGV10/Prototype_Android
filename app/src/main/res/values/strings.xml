@@ -1,8 +1,8 @@
 <resources>
     <string name="app_name">Прототип</string>
-    <string name="add_request_text">Добавить заявку</string>
-    <string name="current_request_text">Просмотр заявок</string>
-    <string name="exit_btn_text">Выход</string>
-    <string name="scan_text">Сканировать</string>
-    <string name="result_text">Результат</string>
+    <string name="text_add_request">Добавить заявку</string>
+    <string name="text_current_request">Просмотр заявок</string>
+    <string name="text_btn_exit">Выход</string>
+    <string name="text_scan_scan">Сканировать</string>
+    <string name="text_scan_result">Результат</string>
 </resources>
