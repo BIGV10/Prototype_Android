@@ -7,7 +7,8 @@ import retrofit2.converter.gson.GsonConverterFactory
 
 object ServiceBuilder {
 
-    private const val BASE_URL = "https://bigv-prototype.herokuapp.com/api/"
+    private const val BASE_URL = "http://bigv.ddns.net:8080/api/"
+//    private const val BASE_URL = "https://bigv-prototype.herokuapp.com/api/"
 //    private const val BASE_URL = "http://localhost:8080/api/"
 //    private const val BASE_URL = "http://10.0.2.2:8080/api/" //localhost of PC
 
