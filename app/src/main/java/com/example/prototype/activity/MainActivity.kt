@@ -28,7 +28,6 @@ class MainActivity : AppCompatActivity() {
             startActivity(goToActivity)
         }
 
-
         btn_exit.setOnClickListener {
             moveTaskToBack(true)
             exitProcess(-1)

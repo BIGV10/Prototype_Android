@@ -1,12 +1,14 @@
 package com.example.prototype.activity
 
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.preference.PreferenceManager
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.prototype.AuthHelper
 import com.example.prototype.R
-import com.example.prototype.adapter.RequestAdapter
 import com.example.prototype.ServiceBuilder
+import com.example.prototype.adapter.RequestAdapter
 import com.example.prototype.model.Request
 import com.example.prototype.service.RequestService
 import kotlinx.android.synthetic.main.activity_last_requests.*
@@ -14,9 +16,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
+
 class LastRequestsActivity : AppCompatActivity() {
 
     var requestList = ArrayList<Request>()
+
+    var authHelper: AuthHelper? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -28,10 +33,12 @@ class LastRequestsActivity : AppCompatActivity() {
         loadLastRequests()
     }
 
-    fun loadLastRequests() {
+
+    private fun loadLastRequests() {
         val requestService =
             ServiceBuilder.buildService(RequestService::class.java)
-        val requestCall = requestService.getLastRequests()
+        var completeHeader = "Bearer " + AuthHelper(this).getIdToken()
+        val requestCall = requestService.getLastRequests(completeHeader)
         requestCall.enqueue(object : Callback<List<Request>> {
             override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
                 if (response.isSuccessful) {
@@ -40,14 +47,16 @@ class LastRequestsActivity : AppCompatActivity() {
                     recyclerView_requestsList.adapter = RequestAdapter(requestList)
                     Toast.makeText(
                         this@LastRequestsActivity,
-                        "Всё загрузилось\n" + response.code(), Toast.LENGTH_LONG
+                        "Всё загрузилось\n" + response.code(),
+                        Toast.LENGTH_LONG
                     ).show()
 
                 } else { //Status code is not 200's
                     if (response.code() == 500) {
                         Toast.makeText(
                             this@LastRequestsActivity,
-                            "\n" + response.code(), Toast.LENGTH_LONG
+                            "\n" + response.code(),
+                            Toast.LENGTH_LONG
                         ).show()
                     } else {
                         Toast.makeText(
@@ -63,5 +72,12 @@ class LastRequestsActivity : AppCompatActivity() {
                 Toast.makeText(this@LastRequestsActivity, t.message, Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    private fun getAuthHeader(): String //Получение токена из SharedPreferences
+    {
+        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
+        val token = preferences.getString("tokenJWT", "")
+        return "Bearer " + token!!
     }
 }
