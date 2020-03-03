@@ -1,22 +1,22 @@
-package com.example.prototype.activity
+package com.example.prototype.activity.menu
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.appcompat.app.AppCompatActivity
 import com.example.prototype.AuthHelper
 import com.example.prototype.R
-import kotlinx.android.synthetic.main.activity_main.*
-import kotlin.system.exitProcess
+import com.example.prototype.activity.AddEquipmentActivity
+import com.example.prototype.activity.AddRequestActivity
+import com.example.prototype.activity.LastRequestsActivity
+import kotlinx.android.synthetic.main.activity_main_admin.*
 
-class MainActivity : AppCompatActivity() {
+class MainAdminActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        setContentView(R.layout.activity_main_admin)
 
-        var qw = AuthHelper(this)
-        var we = qw.getUsername()
-        textUsername.setText("Логин: "+ AuthHelper(this).getUsername())
+        textUsername.setText("Админ: " + AuthHelper(this).getUsername())
 
         btn_add_request.setOnClickListener {
             val goToActivity = Intent(this, AddRequestActivity::class.java)
@@ -28,14 +28,12 @@ class MainActivity : AppCompatActivity() {
             startActivity(goToActivity)
         }
 
-        btn_hidden_add_equipment.setOnClickListener {
+        btn_add_equipment.setOnClickListener {
             val goToActivity = Intent(this, AddEquipmentActivity::class.java)
             startActivity(goToActivity)
         }
 
         btn_exit.setOnClickListener {
-//            moveTaskToBack(true)
-//            exitProcess(-1)
             finish()
         }
     }

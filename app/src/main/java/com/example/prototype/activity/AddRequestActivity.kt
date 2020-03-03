@@ -9,11 +9,13 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.prototype.AuthHelper
-import com.example.prototype.adapter.EquipmentAdapter
 import com.example.prototype.R
 import com.example.prototype.ServiceBuilder
-import com.example.prototype.model.*
-import com.example.prototype.service.*
+import com.example.prototype.adapter.EquipmentAdapter
+import com.example.prototype.model.Equipment
+import com.example.prototype.model.Request
+import com.example.prototype.service.EquipmentService
+import com.example.prototype.service.RequestService
 import com.google.zxing.ResultPoint
 import com.journeyapps.barcodescanner.BarcodeCallback
 import com.journeyapps.barcodescanner.BarcodeResult
@@ -88,14 +90,14 @@ class AddRequestActivity : AppCompatActivity() {
     fun loadEquipment(barcode: String) {
         val equipmentService =
             ServiceBuilder.buildService(EquipmentService::class.java)
-        var authHeader = "Bearer " + AuthHelper(this).getIdToken()
+        val authHeader = "Bearer " + AuthHelper(this).getIdToken()
         val requestCall = equipmentService.getEquipmentByBarcode(barcode, authHeader)
         requestCall.enqueue(object : Callback<Equipment> {
             override fun onResponse(call: Call<Equipment>, response: Response<Equipment>) {
                 if (response.isSuccessful) {
                     val body = response.body()
                     if (equipmentList.indexOf(body as Equipment) < 0) {
-                        equipmentList.add(body as Equipment)
+                        equipmentList.add(body)
                     } else {
                         Toast.makeText(
                             this@AddRequestActivity,
@@ -103,7 +105,7 @@ class AddRequestActivity : AppCompatActivity() {
                         ).show()
                     }
 
-                    var adapter =
+                    val adapter =
                         EquipmentAdapter(
                             equipmentList
                         )
@@ -135,15 +137,15 @@ class AddRequestActivity : AppCompatActivity() {
     fun sendNewRequest() {
         val requestService =
             ServiceBuilder.buildService(RequestService::class.java)
-        var newRequest = Request()
+        val newRequest = Request()
         newRequest.comment = text_equipment_barcode.text.toString()
         newRequest.status = 0
-        var authHeader = "Bearer " + AuthHelper(this).getIdToken()
+        val authHeader = "Bearer " + AuthHelper(this).getIdToken()
         val requestCallNewRequest = requestService.postRequest(newRequest, authHeader)
         requestCallNewRequest.enqueue(object : Callback<Request> {
             override fun onResponse(call: Call<Request>, response: Response<Request>) {
                 if (response.isSuccessful) {
-                    var createdRequest = (response.body() as Request).id!!
+                    val createdRequest = (response.body() as Request).id!!
                     addEquipmentToRequest(createdRequest)
                 }
             }
@@ -157,10 +159,10 @@ class AddRequestActivity : AppCompatActivity() {
     fun addEquipmentToRequest(requestId: Int) {
         val requestService =
             ServiceBuilder.buildService(RequestService::class.java)
-        var equipmentCount = equipmentList.size
+        val equipmentCount = equipmentList.size
         var successfulRequests = 0
         var unsuccessfulRequests = ""
-        var authHeader = "Bearer " + AuthHelper(this).getIdToken()
+        val authHeader = "Bearer " + AuthHelper(this).getIdToken()
         equipmentList.forEach {
             val requestCallAddEquipment = requestService.postEquipmentToRequest(requestId, it.id!!, authHeader)
             requestCallAddEquipment.enqueue(object : Callback<Equipment> {

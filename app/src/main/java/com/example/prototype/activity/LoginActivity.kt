@@ -7,6 +7,9 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.prototype.AuthHelper
 import com.example.prototype.R
 import com.example.prototype.ServiceBuilder
+import com.example.prototype.activity.menu.MainAdminActivity
+import com.example.prototype.activity.menu.MainTechActivity
+import com.example.prototype.activity.menu.MainUserActivity
 import com.example.prototype.model.UserLogin
 import com.example.prototype.service.AuthService
 import com.google.gson.JsonObject
@@ -46,7 +49,7 @@ class LoginActivity : AppCompatActivity() {
         requestCall.enqueue(object : Callback<UserLogin> {
             override fun onResponse(call: Call<UserLogin>, response: Response<UserLogin>) {
                 if (response.isSuccessful) {
-                    var userGet = response.body()
+                    val userGet = response.body()
 //                    Старый способ записи токена
 //                    val preferences: SharedPreferences =
 //                        PreferenceManager.getDefaultSharedPreferences(this@LoginActivity)
@@ -54,10 +57,11 @@ class LoginActivity : AppCompatActivity() {
 //                    editor.putString("tokenJWT", userGet!!.accessToken)
 //                    editor.apply()
                     AuthHelper(this@LoginActivity).setIdToken(userGet!!)
+                    val roles = AuthHelper(this@LoginActivity).getRoles()
+                    activityByRole(roles!!)
                     editTextLogin.setText("")
                     editTextPassword.setText("")
-                    val goToActivity = Intent(this@LoginActivity, MainActivity::class.java)
-                    startActivity(goToActivity)
+
                 } else { //Код статуса не в 200
                     if (response.code() == 404) {
                         Toast.makeText(
@@ -65,10 +69,16 @@ class LoginActivity : AppCompatActivity() {
                             "Пользователь не найден\n" + response.code(),
                             Toast.LENGTH_LONG
                         ).show()
+                    } else if (response.code() == 400) {
+                        Toast.makeText(
+                            this@LoginActivity,
+                            "Неверный логин\n" + response.code() + "\n" + response.body(),
+                            Toast.LENGTH_LONG
+                        ).show()
                     } else {
                         Toast.makeText(
                             this@LoginActivity,
-                            "Не удалось получить информацию\n" + response.code() + "\n" + response.body(),
+                            "Неожиданная ошибка \n" + response.code() + "\n" + response.body(),
                             Toast.LENGTH_LONG
                         ).show()
                     }
@@ -79,5 +89,20 @@ class LoginActivity : AppCompatActivity() {
                 Toast.makeText(this@LoginActivity, t.message, Toast.LENGTH_LONG).show()
             }
         })
+    }
+
+    fun activityByRole(roles: List<String>) {
+        if (roles.any { it == "ROLE_ADMIN" || it == "ROLE_MODERATOR" }) {
+            val adminActivity = Intent(this@LoginActivity, MainAdminActivity::class.java)
+            startActivity(adminActivity)
+        } else if (roles.any { it == "ROLE_TECHNICIAN" }) {
+            val techActivity = Intent(this@LoginActivity, MainTechActivity::class.java)
+            startActivity(techActivity)
+        } else if (roles.any { it == "ROLE_USER" }) {
+            val userActivity = Intent(this@LoginActivity, MainUserActivity::class.java)
+            startActivity(userActivity)
+        } else {
+            Toast.makeText(this@LoginActivity, "У пользователя нет ролей", Toast.LENGTH_LONG).show()
+        }
     }
 }

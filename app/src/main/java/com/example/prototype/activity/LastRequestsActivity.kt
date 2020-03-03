@@ -1,7 +1,6 @@
 package com.example.prototype.activity
 
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +36,7 @@ class LastRequestsActivity : AppCompatActivity() {
     private fun loadLastRequests() {
         val requestService =
             ServiceBuilder.buildService(RequestService::class.java)
-        var authHeader = "Bearer " + AuthHelper(this).getIdToken()
+        val authHeader = "Bearer " + AuthHelper(this).getIdToken()
         val requestCall = requestService.getLastRequests(authHeader)
         requestCall.enqueue(object : Callback<List<Request>> {
             override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
@@ -45,17 +44,17 @@ class LastRequestsActivity : AppCompatActivity() {
                     val body = response.body()
                     requestList = ArrayList(body!!)
                     recyclerView_requestsList.adapter = RequestAdapter(requestList)
-                    Toast.makeText(
-                        this@LastRequestsActivity,
-                        "Всё загрузилось\n" + response.code(),
-                        Toast.LENGTH_LONG
-                    ).show()
-
                 } else { //Status code is not 200's
                     if (response.code() == 500) {
                         Toast.makeText(
                             this@LastRequestsActivity,
                             "\n" + response.code(),
+                            Toast.LENGTH_LONG
+                        ).show()
+                    } else if (response.code() == 403) {
+                        Toast.makeText(
+                            this@LastRequestsActivity,
+                            "У пользователя недостаточно прав" + response.code(),
                             Toast.LENGTH_LONG
                         ).show()
                     } else {
@@ -72,12 +71,5 @@ class LastRequestsActivity : AppCompatActivity() {
                 Toast.makeText(this@LastRequestsActivity, t.message, Toast.LENGTH_LONG).show()
             }
         })
-    }
-
-    private fun getAuthHeader(): String //Получение токена из SharedPreferences
-    {
-        val preferences = PreferenceManager.getDefaultSharedPreferences(this)
-        val token = preferences.getString("tokenJWT", "")
-        return "Bearer " + token!!
     }
 }

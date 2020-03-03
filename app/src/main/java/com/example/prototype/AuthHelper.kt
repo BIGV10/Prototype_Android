@@ -2,7 +2,6 @@ package com.example.prototype
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
 import com.auth0.android.jwt.JWT
 import com.example.prototype.model.UserLogin
 
@@ -10,11 +9,12 @@ public class AuthHelper(context: Context) {
 
 //    private val JWT_KEY_USERNAME = "username"
     private val JWT_KEY_USERNAME = "sub"
+    private val JWT_KEY_ROLES = "roles"
 
     private val PREFS = "prefs"
     private val PREF_TOKEN = "tokenJWT"
 
-    private lateinit var mPrefs: SharedPreferences
+    private var mPrefs: SharedPreferences
 
     private var sInstance: AuthHelper? = null
 
@@ -24,13 +24,13 @@ public class AuthHelper(context: Context) {
     }
 
     fun setIdToken(token: UserLogin) {
-        val editor = mPrefs!!.edit()
+        val editor = mPrefs.edit()
         editor.putString(PREF_TOKEN, token.accessToken)
         editor.apply()
     }
 
     fun getIdToken(): String? {
-        return mPrefs!!.getString(PREF_TOKEN, null)
+        return mPrefs.getString(PREF_TOKEN, null)
     }
 
     fun isLoggedIn(): Boolean {
@@ -44,6 +44,11 @@ public class AuthHelper(context: Context) {
         } else null
     }
 
+    fun getRoles(): List<String>? {
+        return if (isLoggedIn()) {
+            decodeRoles(getIdToken())?.asList()
+        } else null
+    }
 
     private fun decodeUsername(token: String?): String? {
         val jwt = JWT(token!!)
@@ -57,7 +62,19 @@ public class AuthHelper(context: Context) {
         return null
     }
 
+    private fun decodeRoles(token: String?): Array<out String>? {
+        val jwt = JWT(token!!)
+        try {
+            if (jwt.getClaim(JWT_KEY_ROLES) != null) {
+                return jwt.getClaim(JWT_KEY_ROLES).asArray(String::class.java)
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return null
+    }
+
     fun clear() {
-        mPrefs!!.edit().clear().commit()
+        mPrefs.edit().clear().commit()
     }
 }

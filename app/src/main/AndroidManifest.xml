@@ -15,29 +15,36 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activity.AddEquipmentActivity"
-            android:label="Добавить оборудование"/>
+        <activity
+            android:name=".activity.AddEquipmentActivity"
+            android:label="Добавить оборудование"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".activity.LastRequestsActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:label="Последние заявки"/>
+            android:label="Последние заявки" />
         <activity
             android:name=".activity.AddRequestActivity"
             android:configChanges="orientation|keyboardHidden|screenSize"
-            android:screenOrientation="portrait"
-            android:label="Добавить заявку"/>
+            android:label="Добавить заявку"
+            android:screenOrientation="portrait" />
         <activity
-            android:name=".activity.MainActivity"
-            android:screenOrientation="portrait"
-            android:label="Главное меню">
-
-        </activity>
+            android:name=".activity.menu.MainAdminActivity"
+            android:label="Главное меню"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.menu.MainUserActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.menu.MainTechActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>
