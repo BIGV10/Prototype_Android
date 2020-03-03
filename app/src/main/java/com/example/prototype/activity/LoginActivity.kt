@@ -1,9 +1,7 @@
 package com.example.prototype.activity
 
 import android.content.Intent
-import android.content.SharedPreferences
 import android.os.Bundle
-import android.preference.PreferenceManager
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.prototype.AuthHelper
@@ -16,6 +14,7 @@ import kotlinx.android.synthetic.main.activity_login.*
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import kotlin.system.exitProcess
 
 
 class LoginActivity : AppCompatActivity() {
@@ -25,9 +24,16 @@ class LoginActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
 
-        buttonEnter.setOnClickListener {
+        buttonUserLogin.setOnClickListener {
             userLogin()
         }
+
+        buttonAppExit.setOnClickListener {
+            moveTaskToBack(true)
+            exitProcess(-1)
+        }
+
+
     }
 
     fun userLogin() {
@@ -48,6 +54,8 @@ class LoginActivity : AppCompatActivity() {
 //                    editor.putString("tokenJWT", userGet!!.accessToken)
 //                    editor.apply()
                     AuthHelper(this@LoginActivity).setIdToken(userGet!!)
+                    editTextLogin.setText("")
+                    editTextPassword.setText("")
                     val goToActivity = Intent(this@LoginActivity, MainActivity::class.java)
                     startActivity(goToActivity)
                 } else { //Код статуса не в 200

@@ -8,7 +8,8 @@ import com.example.prototype.model.UserLogin
 
 public class AuthHelper(context: Context) {
 
-    private val JWT_KEY_USERNAME = "username"
+//    private val JWT_KEY_USERNAME = "username"
+    private val JWT_KEY_USERNAME = "sub"
 
     private val PREFS = "prefs"
     private val PREF_TOKEN = "tokenJWT"

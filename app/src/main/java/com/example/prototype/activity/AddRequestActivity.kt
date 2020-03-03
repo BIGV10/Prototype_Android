@@ -8,6 +8,7 @@ import android.os.Vibrator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.example.prototype.AuthHelper
 import com.example.prototype.adapter.EquipmentAdapter
 import com.example.prototype.R
 import com.example.prototype.ServiceBuilder
@@ -87,7 +88,8 @@ class AddRequestActivity : AppCompatActivity() {
     fun loadEquipment(barcode: String) {
         val equipmentService =
             ServiceBuilder.buildService(EquipmentService::class.java)
-        val requestCall = equipmentService.getEquipmentByBarcode(barcode)
+        var authHeader = "Bearer " + AuthHelper(this).getIdToken()
+        val requestCall = equipmentService.getEquipmentByBarcode(barcode, authHeader)
         requestCall.enqueue(object : Callback<Equipment> {
             override fun onResponse(call: Call<Equipment>, response: Response<Equipment>) {
                 if (response.isSuccessful) {
@@ -136,7 +138,8 @@ class AddRequestActivity : AppCompatActivity() {
         var newRequest = Request()
         newRequest.comment = text_equipment_barcode.text.toString()
         newRequest.status = 0
-        val requestCallNewRequest = requestService.postRequest(newRequest)
+        var authHeader = "Bearer " + AuthHelper(this).getIdToken()
+        val requestCallNewRequest = requestService.postRequest(newRequest, authHeader)
         requestCallNewRequest.enqueue(object : Callback<Request> {
             override fun onResponse(call: Call<Request>, response: Response<Request>) {
                 if (response.isSuccessful) {
@@ -157,8 +160,9 @@ class AddRequestActivity : AppCompatActivity() {
         var equipmentCount = equipmentList.size
         var successfulRequests = 0
         var unsuccessfulRequests = ""
+        var authHeader = "Bearer " + AuthHelper(this).getIdToken()
         equipmentList.forEach {
-            val requestCallAddEquipment = requestService.postEquipmentToRequest(requestId, it.id!!)
+            val requestCallAddEquipment = requestService.postEquipmentToRequest(requestId, it.id!!, authHeader)
             requestCallAddEquipment.enqueue(object : Callback<Equipment> {
                 override fun onResponse(call: Call<Equipment>, response: Response<Equipment>) {
                     successfulRequests++

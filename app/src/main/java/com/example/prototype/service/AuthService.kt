@@ -11,7 +11,4 @@ import retrofit2.http.*
 interface AuthService {
     @POST("auth/signin")
     fun signIn(@Body json: JsonObject): Call<UserLogin>
-
-//    @POST("auth/signin")
-//    fun signIn(@Body json: JsonObject): Call<User>
 }

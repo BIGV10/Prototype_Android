@@ -3,6 +3,7 @@ package com.example.prototype.activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import com.example.prototype.AuthHelper
 import com.example.prototype.R
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlin.system.exitProcess
@@ -12,6 +13,10 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        var qw = AuthHelper(this)
+        var we = qw.getUsername()
+        textUsername.setText("Логин: "+ AuthHelper(this).getUsername())
 
         btn_add_request.setOnClickListener {
             val goToActivity = Intent(this, AddRequestActivity::class.java)
@@ -29,8 +34,9 @@ class MainActivity : AppCompatActivity() {
         }
 
         btn_exit.setOnClickListener {
-            moveTaskToBack(true)
-            exitProcess(-1)
+//            moveTaskToBack(true)
+//            exitProcess(-1)
+            finish()
         }
     }
 

@@ -37,8 +37,8 @@ class LastRequestsActivity : AppCompatActivity() {
     private fun loadLastRequests() {
         val requestService =
             ServiceBuilder.buildService(RequestService::class.java)
-        var completeHeader = "Bearer " + AuthHelper(this).getIdToken()
-        val requestCall = requestService.getLastRequests(completeHeader)
+        var authHeader = "Bearer " + AuthHelper(this).getIdToken()
+        val requestCall = requestService.getLastRequests(authHeader)
         requestCall.enqueue(object : Callback<List<Request>> {
             override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
                 if (response.isSuccessful) {

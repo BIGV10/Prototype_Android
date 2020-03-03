@@ -7,6 +7,7 @@ import android.os.VibrationEffect
 import android.os.Vibrator
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.example.prototype.AuthHelper
 import com.example.prototype.R
 import com.example.prototype.ServiceBuilder
 import com.example.prototype.model.Equipment
@@ -78,7 +79,8 @@ class AddEquipmentActivity : AppCompatActivity() {
         newEquipment.barcode = text_equipment_barcode.text.toString()
         newEquipment.name = text_equipment_name.text.toString()
         newEquipment.comment = text_equipment_comment.text.toString()
-        val requestCallNewRequest = equipmentService.postEquipment(newEquipment)
+        var authHeader = "Bearer " + AuthHelper(this).getIdToken()
+        val requestCallNewRequest = equipmentService.postEquipment(newEquipment, authHeader)
         requestCallNewRequest.enqueue(object : Callback<Equipment> {
             override fun onResponse(call: Call<Equipment>, response: Response<Equipment>) {
                 if (response.isSuccessful) {
