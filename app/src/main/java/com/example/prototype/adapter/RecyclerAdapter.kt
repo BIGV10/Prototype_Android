@@ -11,7 +11,8 @@ import com.example.prototype.model.Equipment
 import com.example.prototype.model.Request
 import kotlinx.android.synthetic.main.row_equipment.view.*
 import kotlinx.android.synthetic.main.row_request.view.*
-import java.lang.StringBuilder
+import java.text.SimpleDateFormat
+
 
 class EquipmentAdapter(var equipmentList: ArrayList<Equipment>) :
     RecyclerView.Adapter<CustomViewHolder>() {
@@ -63,6 +64,11 @@ class RequestAdapter(var requestList: ArrayList<Request>) :
             else -> statusString = "Неизвестный вид статуса"
         }
         holder?.view?.text_request_status?.text = statusString
+        holder?.view?.text_request_issuedby?.text = currentRequest.issuedBy
+        val parser = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.S")
+        var formatter = SimpleDateFormat("dd.MM.yyyy HH:mm:ss")
+        var dateTime = formatter.format(parser.parse(currentRequest.dateIssued))
+        holder?.view?.text_request_time_creation?.text = dateTime
         var requestEquipment = StringBuilder()
         currentRequest.equipment?.forEach {
             requestEquipment.append(it.barcode + " " + it.name + " " + it.comment + "\n")
