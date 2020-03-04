@@ -10,6 +10,7 @@ public class AuthHelper(context: Context) {
 //    private val JWT_KEY_USERNAME = "username"
     private val JWT_KEY_USERNAME = "sub"
     private val JWT_KEY_ROLES = "roles"
+    private val JWT_KEY_ENABLED = "enabled"
 
     private val PREFS = "prefs"
     private val PREF_TOKEN = "tokenJWT"
@@ -50,6 +51,12 @@ public class AuthHelper(context: Context) {
         } else null
     }
 
+    fun getEnabled(): Boolean {
+        return if (isLoggedIn()) {
+            decodeEnabled(getIdToken())
+        } else false
+    }
+
     private fun decodeUsername(token: String?): String? {
         val jwt = JWT(token!!)
         try {
@@ -72,6 +79,18 @@ public class AuthHelper(context: Context) {
             e.printStackTrace()
         }
         return null
+    }
+
+    private fun decodeEnabled(token: String?): Boolean {
+        val jwt = JWT(token!!)
+        try {
+            if (jwt.getClaim(JWT_KEY_ENABLED) != null) {
+                return jwt.getClaim(JWT_KEY_ENABLED).asBoolean()!!
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return false
     }
 
     fun clear() {

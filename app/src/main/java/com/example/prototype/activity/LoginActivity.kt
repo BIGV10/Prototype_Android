@@ -35,8 +35,6 @@ class LoginActivity : AppCompatActivity() {
             moveTaskToBack(true)
             exitProcess(-1)
         }
-
-
     }
 
     fun userLogin() {
@@ -58,29 +56,41 @@ class LoginActivity : AppCompatActivity() {
 //                    editor.apply()
                     AuthHelper(this@LoginActivity).setIdToken(userGet!!)
                     val roles = AuthHelper(this@LoginActivity).getRoles()
-                    activityByRole(roles!!)
-                    editTextLogin.setText("")
-                    editTextPassword.setText("")
-
-                } else { //Код статуса не в 200
-                    if (response.code() == 404) {
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Пользователь не найден\n" + response.code(),
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else if (response.code() == 400) {
-                        Toast.makeText(
-                            this@LoginActivity,
-                            "Неверный логин\n" + response.code() + "\n" + response.body(),
-                            Toast.LENGTH_LONG
-                        ).show()
+                    val enabledUser = AuthHelper(this@LoginActivity).getEnabled()
+                    if (enabledUser) {
+                        activityByRole(roles!!)
+                        editTextLogin.setText("")
+                        editTextPassword.setText("")
                     } else {
                         Toast.makeText(
                             this@LoginActivity,
-                            "Неожиданная ошибка \n" + response.code() + "\n" + response.body(),
+                            "Учетная запись данного пользователя отключена",
                             Toast.LENGTH_LONG
                         ).show()
+                    }
+                } else { //Код статуса не в 200
+                    when {
+                        response.code() == 404 -> {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Пользователь не найден\n" + response.code(),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        response.code() == 400 -> {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Неверный логин\n" + response.code() + "\n" + response.body(),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        else -> {
+                            Toast.makeText(
+                                this@LoginActivity,
+                                "Неожиданная ошибка\n" + response.code() + "\n" + response.body(),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }
@@ -92,17 +102,23 @@ class LoginActivity : AppCompatActivity() {
     }
 
     fun activityByRole(roles: List<String>) {
-        if (roles.any { it == "ROLE_ADMIN" || it == "ROLE_MODERATOR" }) {
-            val adminActivity = Intent(this@LoginActivity, MainAdminActivity::class.java)
-            startActivity(adminActivity)
-        } else if (roles.any { it == "ROLE_TECHNICIAN" }) {
-            val techActivity = Intent(this@LoginActivity, MainTechActivity::class.java)
-            startActivity(techActivity)
-        } else if (roles.any { it == "ROLE_USER" }) {
-            val userActivity = Intent(this@LoginActivity, MainUserActivity::class.java)
-            startActivity(userActivity)
-        } else {
-            Toast.makeText(this@LoginActivity, "У пользователя нет ролей", Toast.LENGTH_LONG).show()
+        when {
+            roles.any { it == "ROLE_ADMIN" || it == "ROLE_MODERATOR" } -> {
+                val adminActivity = Intent(this@LoginActivity, MainAdminActivity::class.java)
+                startActivity(adminActivity)
+            }
+            roles.any { it == "ROLE_TECHNICIAN" } -> {
+                val techActivity = Intent(this@LoginActivity, MainTechActivity::class.java)
+                startActivity(techActivity)
+            }
+            roles.any { it == "ROLE_USER" } -> {
+                val userActivity = Intent(this@LoginActivity, MainUserActivity::class.java)
+                startActivity(userActivity)
+            }
+            else -> {
+                Toast.makeText(this@LoginActivity, "У пользователя нет ролей", Toast.LENGTH_LONG)
+                    .show()
+            }
         }
     }
 }
