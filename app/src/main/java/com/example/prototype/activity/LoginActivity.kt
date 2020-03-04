@@ -80,7 +80,7 @@ class LoginActivity : AppCompatActivity() {
                         response.code() == 400 -> {
                             Toast.makeText(
                                 this@LoginActivity,
-                                "Неверный логин\n" + response.code() + "\n" + response.body(),
+                                "Неверный логин\n" + response.body(),
                                 Toast.LENGTH_LONG
                             ).show()
                         }

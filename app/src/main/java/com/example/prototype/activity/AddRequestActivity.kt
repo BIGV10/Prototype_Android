@@ -104,11 +104,7 @@ class AddRequestActivity : AppCompatActivity() {
                             "Данное оборудование уже было добавлено", Toast.LENGTH_LONG
                         ).show()
                     }
-
-                    val adapter =
-                        EquipmentAdapter(
-                            equipmentList
-                        )
+                    val adapter = EquipmentAdapter(equipmentList)
                     recycler_view_equipment_list.adapter = adapter
 
                 } else { //Status code is not 200's

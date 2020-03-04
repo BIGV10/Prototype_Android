@@ -52,7 +52,7 @@
         android:layout_height="80dp"
         android:layout_marginStart="8dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginBottom="8dp"
+        android:layout_marginBottom="16dp"
         android:text="Добавить оборудование"
         app:layout_constraintBottom_toTopOf="@+id/btn_add_request"
         app:layout_constraintEnd_toEndOf="parent"

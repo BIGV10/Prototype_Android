@@ -45,24 +45,28 @@ class LastRequestsActivity : AppCompatActivity() {
                     requestList = ArrayList(body!!)
                     recyclerView_requestsList.adapter = RequestAdapter(requestList)
                 } else { //Status code is not 200's
-                    if (response.code() == 500) {
-                        Toast.makeText(
-                            this@LastRequestsActivity,
-                            "\n" + response.code(),
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else if (response.code() == 403) {
-                        Toast.makeText(
-                            this@LastRequestsActivity,
-                            "У пользователя недостаточно прав" + response.code(),
-                            Toast.LENGTH_LONG
-                        ).show()
-                    } else {
-                        Toast.makeText(
-                            this@LastRequestsActivity,
-                            "Не удалось получить информацию о заявках" + response.code(),
-                            Toast.LENGTH_LONG
-                        ).show()
+                    when {
+                        response.code() == 500 -> {
+                            Toast.makeText(
+                                this@LastRequestsActivity,
+                                "\n" + response.code(),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        response.code() == 403 -> {
+                            Toast.makeText(
+                                this@LastRequestsActivity,
+                                "У пользователя недостаточно прав" + response.code(),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        else -> {
+                            Toast.makeText(
+                                this@LastRequestsActivity,
+                                "Не удалось получить информацию о заявках" + response.code(),
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
                     }
                 }
             }
