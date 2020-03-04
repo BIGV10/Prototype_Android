@@ -1,6 +1,7 @@
 package com.example.prototype.service
 
-import com.example.prototype.model.*
+import com.example.prototype.model.Equipment
+import com.example.prototype.model.Request
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -20,6 +21,11 @@ interface RequestService {
 
     @GET("requests/last")
     fun getLastRequests(
+        @Header("Authorization") token: String
+    ): Call<List<Request>>
+
+    @GET("requests/user")
+    fun getUserRequests(
         @Header("Authorization") token: String
     ): Call<List<Request>>
 }

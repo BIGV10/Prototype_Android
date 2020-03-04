@@ -20,8 +20,6 @@ class LastRequestsActivity : AppCompatActivity() {
 
     var requestList = ArrayList<Request>()
 
-    var authHelper: AuthHelper? = null
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_last_requests)
@@ -37,7 +35,12 @@ class LastRequestsActivity : AppCompatActivity() {
         val requestService =
             ServiceBuilder.buildService(RequestService::class.java)
         val authHeader = "Bearer " + AuthHelper(this).getIdToken()
-        val requestCall = requestService.getLastRequests(authHeader)
+        val roles = AuthHelper(this).getRoles()
+        lateinit var requestCall: Call<List<Request>>
+        if (roles!!.any { it == "ROLE_ADMIN" || it == "ROLE_MODERATOR" || it == "ROLE_TECHNICIAN" })
+            requestCall = requestService.getLastRequests(authHeader)
+        else
+            requestCall = requestService.getUserRequests(authHeader)
         requestCall.enqueue(object : Callback<List<Request>> {
             override fun onResponse(call: Call<List<Request>>, response: Response<List<Request>>) {
                 if (response.isSuccessful) {
